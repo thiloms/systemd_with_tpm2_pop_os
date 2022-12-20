@@ -34,7 +34,8 @@ function prereqs_old()
 }
 function install_docker()
 {
-	apt install -y docker.io
+	echo "Docker should already be installed"
+	# apt install -y docker.io
 }
 
 function compile_systemd_with_tpm2()
@@ -45,6 +46,13 @@ function compile_systemd_with_tpm2()
 function install_systemd_with_tpm2()
 {
 	dpkg -i systemd_249.11-0ubuntu*_amd64.deb libsystemd0_249.11-0ubuntu*_amd64.deb
+	# prevent "systemd" from downgrade via apt
+	#   see: https://ostechnix.com/hold-or-prevent-a-package-from-upgrade-in-debian-ubuntu/
+	# Check possible versions with "apt policy systemd"
+	apt-mark hold systemd
+	# to unhold
+	# apt-mark unhold systemd
+	apt-mark showhold
 }
 
 function install_crypt_setup_mod_scripts()
@@ -102,4 +110,4 @@ if [[ "${EUID}" -ne 0 ]] ; then
 	exit 1
 fi
 
-tldr_just_work
+tldr_just_work_old
